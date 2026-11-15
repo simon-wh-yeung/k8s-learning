@@ -37,7 +37,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: inventory-secret
-                  key: DB_USER
+                  key: DB_USERNAME
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
