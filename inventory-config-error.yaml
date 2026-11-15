@@ -27,7 +27,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: inventory-config
-                  key: LOGLEVEL
+                  key: LOG_LEVEL
             - name: DB_HOST
               valueFrom:
                 configMapKeyRef:
