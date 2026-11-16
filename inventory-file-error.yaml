@@ -30,3 +30,6 @@ spec:
                 path: APP_ENV
               - key: DB_HOST
                 path: DB_HOST
+              - key: LOG_LEVEL
+                path: LOG_LEVEL
+
