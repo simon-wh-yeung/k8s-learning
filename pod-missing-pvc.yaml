@@ -14,4 +14,4 @@ spec:
   volumes:
     - name: storage
       persistentVolumeClaim:
-        claimName: pvc-does-not-exist
+        claimName: pvc-wrong-storageclass
