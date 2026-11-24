@@ -1,0 +1,552 @@
+PowerShell 7.7.0
+PS C:\Users\simon> wsl -d debian
+simon@DESKTOP-ODG5TEO:/mnt/c/Users/simon$ kubectl describe deployment nginx-deployment
+Name:                   nginx-deployment
+Namespace:              default
+CreationTimestamp:      Mon, 02 Nov 2026 08:17:16 -0800
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 11
+Selector:               app=nginx
+Replicas:               2 desired | 2 updated | 2 total | 2 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:       app=nginx
+  Annotations:  kubectl.kubernetes.io/restartedAt: 2026-11-23T09:09:48-08:00
+  Containers:
+   nginx:
+    Image:      nginx:1.30
+    Port:       80/TCP
+    Host Port:  0/TCP
+    Environment:
+      APP_ENV:     staging
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Progressing    True    NewReplicaSetAvailable
+  Available      True    MinimumReplicasAvailable
+OldReplicaSets:  nginx-deployment-578c8ff859 (0/0 replicas created), nginx-deployment-59f4997b9 (0/0 replicas created), nginx-deployment-75c84cc876 (0/0 replicas created), nginx-deployment-57d4868dd7 (0/0 replicas created), nginx-deployment-cbddd759f (0/0 replicas created)
+NewReplicaSet:   nginx-deployment-5fcbf788b8 (2/2 replicas created)
+Events:
+  Type    Reason             Age                From                   Message
+  ----    ------             ----               ----                   -------
+  Normal  ScalingReplicaSet  35h (x2 over 37h)  deployment-controller  Scaled up replica set nginx-deployment-578c8ff859 from 0 to 1
+  Normal  ScalingReplicaSet  35h (x2 over 37h)  deployment-controller  Scaled down replica set nginx-deployment-59f4997b9 from 2 to 1
+  Normal  ScalingReplicaSet  35h (x2 over 37h)  deployment-controller  Scaled up replica set nginx-deployment-578c8ff859 from 1 to 2
+  Normal  ScalingReplicaSet  35h (x2 over 37h)  deployment-controller  Scaled down replica set nginx-deployment-59f4997b9 from 1 to 0
+  Normal  ScalingReplicaSet  35h                deployment-controller  Scaled up replica set nginx-deployment-57d4868dd7 from 0 to 1
+  Normal  ScalingReplicaSet  35h (x3 over 39h)  deployment-controller  Scaled down replica set nginx-deployment-578c8ff859 from 2 to 1
+  Normal  ScalingReplicaSet  35h                deployment-controller  Scaled up replica set nginx-deployment-57d4868dd7 from 1 to 2
+  Normal  ScalingReplicaSet  35h (x3 over 39h)  deployment-controller  Scaled down replica set nginx-deployment-578c8ff859 from 1 to 0
+  Normal  ScalingReplicaSet  35h                deployment-controller  Scaled up replica set nginx-deployment-cbddd759f from 0 to 1
+  Normal  ScalingReplicaSet  35h                deployment-controller  Scaled down replica set nginx-deployment-57d4868dd7 from 2 to 1
+  Normal  ScalingReplicaSet  35h                deployment-controller  Scaled up replica set nginx-deployment-cbddd759f from 1 to 2
+  Normal  ScalingReplicaSet  35h                deployment-controller  Scaled down replica set nginx-deployment-57d4868dd7 from 1 to 0
+  Normal  ScalingReplicaSet  23h                deployment-controller  Scaled up replica set nginx-deployment-5fcbf788b8 from 0 to 1
+  Normal  ScalingReplicaSet  23h                deployment-controller  Scaled down replica set nginx-deployment-cbddd759f from 2 to 1
+  Normal  ScalingReplicaSet  23h                deployment-controller  Scaled up replica set nginx-deployment-5fcbf788b8 from 1 to 2
+  Normal  ScalingReplicaSet  23h                deployment-controller  Scaled down replica set nginx-deployment-cbddd759f from 1 to 0
+  Normal  ScalingReplicaSet  11h (x2 over 11h)  deployment-controller  Scaled up replica set nginx-deployment-5fcbf788b8 from 2 to 4
+  Normal  ScalingReplicaSet  11h (x2 over 11h)  deployment-controller  Scaled down replica set nginx-deployment-5fcbf788b8 from 4 to 2
+simon@DESKTOP-ODG5TEO:/mnt/c/Users/simon$
+simon@DESKTOP-ODG5TEO:/mnt/c/Users/simon$ kubectl get deployment nginx-deployment -o yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "11"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"nginx-deployment","namespace":"default"},"spec":{"replicas":2,"selector":{"matchLabels":{"app":"nginx"}},"template":{"metadata":{"labels":{"app":"nginx"}},"spec":{"containers":[{"image":"nginx:1.29","name":"nginx","ports":[{"containerPort":80}]}]}}}}
+  creationTimestamp: "2026-11-02T16:17:16Z"
+  generation: 19
+  name: nginx-deployment
+  namespace: default
+  resourceVersion: "204550"
+  uid: 8aaf9071-abaf-4381-ac30-b99ed3f644ad
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 2
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: nginx
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/restartedAt: "2026-11-23T09:09:48-08:00"
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - env:
+        - name: APP_ENV
+          value: staging
+        image: nginx:1.30
+        imagePullPolicy: IfNotPresent
+        name: nginx
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 2
+  conditions:
+  - lastTransitionTime: "2026-11-23T04:48:59Z"
+    lastUpdateTime: "2026-11-23T17:09:51Z"
+    message: ReplicaSet "nginx-deployment-5fcbf788b8" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2026-11-24T04:17:39Z"
+    lastUpdateTime: "2026-11-24T04:17:39Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 19
+  readyReplicas: 2
+  replicas: 2
+  updatedReplicas: 2
+simon@DESKTOP-ODG5TEO:/mnt/c/Users/simon$ kubectl describe node desktop-control-plane
+Name:               desktop-control-plane
+Roles:              control-plane
+Labels:             beta.kubernetes.io/arch=amd64
+                    beta.kubernetes.io/os=linux
+                    kubernetes.io/arch=amd64
+                    kubernetes.io/hostname=desktop-control-plane
+                    kubernetes.io/os=linux
+                    node-role.kubernetes.io/control-plane=
+Annotations:        node.alpha.kubernetes.io/ttl: 0
+                    volumes.kubernetes.io/controller-managed-attach-detach: true
+CreationTimestamp:  Mon, 02 Nov 2026 08:16:10 -0800
+Taints:             <none>
+Unschedulable:      false
+Lease:
+  HolderIdentity:  desktop-control-plane
+  AcquireTime:     <unset>
+  RenewTime:       Tue, 24 Nov 2026 08:14:19 -0800
+Conditions:
+  Type             Status  LastHeartbeatTime                 LastTransitionTime                Reason                       Message
+  ----             ------  -----------------                 ------------------                ------                       -------
+  MemoryPressure   False   Tue, 24 Nov 2026 08:13:58 -0800   Mon, 02 Nov 2026 08:16:09 -0800   KubeletHasSufficientMemory   kubelet has sufficient memory available
+  DiskPressure     False   Tue, 24 Nov 2026 08:13:58 -0800   Mon, 02 Nov 2026 08:16:09 -0800   KubeletHasNoDiskPressure     kubelet has no disk pressure
+  PIDPressure      False   Tue, 24 Nov 2026 08:13:58 -0800   Mon, 02 Nov 2026 08:16:09 -0800   KubeletHasSufficientPID      kubelet has sufficient PID available
+  Ready            True    Tue, 24 Nov 2026 08:13:58 -0800   Mon, 02 Nov 2026 08:16:33 -0800   KubeletReady                 kubelet is posting ready status
+Addresses:
+  InternalIP:  172.18.0.2
+  Hostname:    desktop-control-plane
+Capacity:
+  cpu:                16
+  ephemeral-storage:  1055762868Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             7970900Ki
+  pods:               110
+Allocatable:
+  cpu:                16
+  ephemeral-storage:  1055762868Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             7970900Ki
+  pods:               110
+System Info:
+  Machine ID:                 5a7c4b0905a44e89bd8691aa8371514b
+  System UUID:                5a7c4b0905a44e89bd8691aa8371514b
+  Boot ID:                    dfeb32f4-fcae-4cba-a9d6-8e07ae9ebf4d
+  Kernel Version:             6.6.114.1-microsoft-standard-WSL2
+  OS Image:                   Debian GNU/Linux 12 (bookworm)
+  Operating System:           linux
+  Architecture:               amd64
+  Container Runtime Version:  containerd://2.2.0
+  Kubelet Version:            v1.34.3
+  Kube-Proxy Version:
+PodCIDR:                      10.244.0.0/24
+PodCIDRs:                     10.244.0.0/24
+ProviderID:                   kind://docker/desktop/desktop-control-plane
+Non-terminated Pods:          (30 in total)
+  Namespace                   Name                                             CPU Requests  CPU Limits  Memory Requests  Memory Limits  Age
+  ---------                   ----                                             ------------  ----------  ---------------  -------------  ---
+  default                     app-config-deployment-78b4b6b48-95hxn            0 (0%)        0 (0%)      0 (0%)           0 (0%)         9d
+  default                     app-config-deployment-78b4b6b48-kws2b            0 (0%)        0 (0%)      0 (0%)           0 (0%)         9d
+  default                     config-volume-deployment-66d96d9ff4-x9plr        0 (0%)        0 (0%)      0 (0%)           0 (0%)         10d
+  default                     nginx-deployment-5fcbf788b8-96r4n                0 (0%)        0 (0%)      0 (0%)           0 (0%)         23h
+  default                     nginx-deployment-5fcbf788b8-gxmn4                0 (0%)        0 (0%)      0 (0%)           0 (0%)         23h
+  default                     secret-env-demo                                  0 (0%)        0 (0%)      0 (0%)           0 (0%)         12d
+  default                     secret-file-demo                                 0 (0%)        0 (0%)      0 (0%)           0 (0%)         12d
+  default                     secret-volume-deployment-6d647f87b4-qjccr        0 (0%)        0 (0%)      0 (0%)           0 (0%)         10d
+  kube-system                 coredns-66bc5c9577-rj6wt                         100m (0%)     0 (0%)      70Mi (0%)        170Mi (2%)     21d
+  kube-system                 coredns-66bc5c9577-zwn4w                         100m (0%)     0 (0%)      70Mi (0%)        170Mi (2%)     21d
+  kube-system                 etcd-desktop-control-plane                       100m (0%)     0 (0%)      100Mi (1%)       0 (0%)         21d
+  kube-system                 kindnet-xpw2n                                    100m (0%)     100m (0%)   50Mi (0%)        50Mi (0%)      21d
+  kube-system                 kube-apiserver-desktop-control-plane             250m (1%)     0 (0%)      0 (0%)           0 (0%)         21d
+  kube-system                 kube-controller-manager-desktop-control-plane    200m (1%)     0 (0%)      0 (0%)           0 (0%)         21d
+  kube-system                 kube-proxy-l9rww                                 0 (0%)        0 (0%)      0 (0%)           0 (0%)         21d
+  kube-system                 kube-scheduler-desktop-control-plane             100m (0%)     0 (0%)      0 (0%)           0 (0%)         21d
+  lesson5e                    inventory-app-799d788b65-chcgc                   0 (0%)        0 (0%)      0 (0%)           0 (0%)         9d
+  lesson5e                    inventory-app-799d788b65-spj99                   0 (0%)        0 (0%)      0 (0%)           0 (0%)         9d
+  lesson5e                    inventory-config-error-cd789c7cc-g8pbc           0 (0%)        0 (0%)      0 (0%)           0 (0%)         9d
+  lesson5e                    inventory-file-error-575567d859-pb4pp            0 (0%)        0 (0%)      0 (0%)           0 (0%)         7d22h
+  lesson5e                    inventory-missing-config-56c95d6c5-f2xzj         0 (0%)        0 (0%)      0 (0%)           0 (0%)         7d23h
+  lesson6                     emptydir-demo                                    0 (0%)        0 (0%)      0 (0%)           0 (0%)         5d12h
+  lesson6                     pvc-demo                                         0 (0%)        0 (0%)      0 (0%)           0 (0%)         5d11h
+  lesson6                     stateful-demo-0                                  0 (0%)        0 (0%)      0 (0%)           0 (0%)         3d12h
+  lesson6                     stateful-demo-1                                  0 (0%)        0 (0%)      0 (0%)           0 (0%)         3d12h
+  lesson6e                    pod-missing-pvc                                  0 (0%)        0 (0%)      0 (0%)           0 (0%)         2d13h
+  lesson6e                    pvc-capacity-consumer                            0 (0%)        0 (0%)      0 (0%)           0 (0%)         2d13h
+  lesson6e                    pvc-consumer                                     0 (0%)        0 (0%)      0 (0%)           0 (0%)         2d23h
+  lesson6e                    pvc-second-consumer                              0 (0%)        0 (0%)      0 (0%)           0 (0%)         2d12h
+  local-path-storage          local-path-provisioner-5c4cdb564f-4xdsq          0 (0%)        0 (0%)      0 (0%)           0 (0%)         21d
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests    Limits
+  --------           --------    ------
+  cpu                950m (5%)   100m (0%)
+  memory             290Mi (3%)  390Mi (5%)
+  ephemeral-storage  0 (0%)      0 (0%)
+  hugepages-1Gi      0 (0%)      0 (0%)
+  hugepages-2Mi      0 (0%)      0 (0%)
+Events:
+  Type     Reason                   Age                    From             Message
+  ----     ------                   ----                   ----             -------
+  Normal   Starting                 3m28s                  kube-proxy
+  Normal   Starting                 12h                    kube-proxy
+  Normal   Starting                 23h                    kube-proxy
+  Normal   Starting                 23h                    kubelet          Starting kubelet.
+  Normal   NodeHasSufficientMemory  23h (x8 over 23h)      kubelet          Node desktop-control-plane status is now: NodeHasSufficientMemory
+  Normal   NodeHasNoDiskPressure    23h (x8 over 23h)      kubelet          Node desktop-control-plane status is now: NodeHasNoDiskPressure
+  Normal   NodeHasSufficientPID     23h (x7 over 23h)      kubelet          Node desktop-control-plane status is now: NodeHasSufficientPID
+  Normal   NodeAllocatableEnforced  23h                    kubelet          Updated Node Allocatable limit across pods
+  Warning  Rebooted                 23h                    kubelet          Node desktop-control-plane has been rebooted, boot id: 09930656-4b80-4727-9092-7fe26ca87f73
+  Normal   RegisteredNode           23h                    node-controller  Node desktop-control-plane event: Registered Node desktop-control-plane in Controller
+  Normal   NodeHasNoDiskPressure    12h (x8 over 12h)      kubelet          Node desktop-control-plane status is now: NodeHasNoDiskPressure
+  Normal   NodeHasSufficientMemory  12h (x8 over 12h)      kubelet          Node desktop-control-plane status is now: NodeHasSufficientMemory
+  Normal   Starting                 12h                    kubelet          Starting kubelet.
+  Normal   NodeHasSufficientPID     12h (x7 over 12h)      kubelet          Node desktop-control-plane status is now: NodeHasSufficientPID
+  Normal   NodeAllocatableEnforced  12h                    kubelet          Updated Node Allocatable limit across pods
+  Warning  Rebooted                 12h                    kubelet          Node desktop-control-plane has been rebooted, boot id: 48e3b414-c16a-4f87-8761-dec09492e985
+  Normal   RegisteredNode           12h                    node-controller  Node desktop-control-plane event: Registered Node desktop-control-plane in Controller
+  Normal   Starting                 3m36s                  kubelet          Starting kubelet.
+  Normal   NodeHasSufficientMemory  3m36s (x8 over 3m36s)  kubelet          Node desktop-control-plane status is now: NodeHasSufficientMemory
+  Normal   NodeHasNoDiskPressure    3m36s (x8 over 3m36s)  kubelet          Node desktop-control-plane status is now: NodeHasNoDiskPressure
+  Normal   NodeHasSufficientPID     3m36s (x7 over 3m36s)  kubelet          Node desktop-control-plane status is now: NodeHasSufficientPID
+  Normal   NodeAllocatableEnforced  3m36s                  kubelet          Updated Node Allocatable limit across pods
+  Warning  Rebooted                 3m32s                  kubelet          Node desktop-control-plane has been rebooted, boot id: dfeb32f4-fcae-4cba-a9d6-8e07ae9ebf4d
+  Normal   RegisteredNode           3m13s                  node-controller  Node desktop-control-plane event: Registered Node desktop-control-plane in Controller
+simon@DESKTOP-ODG5TEO:/mnt/c/Users/simon$ kubectl get pods -l app=nginx -o yaml
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/restartedAt: "2026-11-23T09:09:48-08:00"
+    creationTimestamp: "2026-11-23T17:09:50Z"
+    generateName: nginx-deployment-5fcbf788b8-
+    generation: 1
+    labels:
+      app: nginx
+      pod-template-hash: 5fcbf788b8
+    name: nginx-deployment-5fcbf788b8-96r4n
+    namespace: default
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: nginx-deployment-5fcbf788b8
+      uid: dc0ab18d-37d2-404d-8c52-65a1d37ee2c5
+    resourceVersion: "208547"
+    uid: 8ce6873e-4b13-4cc5-953f-0861c3e1fb9c
+  spec:
+    containers:
+    - env:
+      - name: APP_ENV
+        value: staging
+      image: nginx:1.30
+      imagePullPolicy: IfNotPresent
+      name: nginx
+      ports:
+      - containerPort: 80
+        protocol: TCP
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-ktn6c
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: desktop-control-plane
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-ktn6c
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2026-11-24T16:10:58Z"
+      observedGeneration: 1
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2026-11-23T17:09:50Z"
+      observedGeneration: 1
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2026-11-24T16:10:58Z"
+      observedGeneration: 1
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2026-11-24T16:10:58Z"
+      observedGeneration: 1
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2026-11-23T17:09:50Z"
+      observedGeneration: 1
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://e7c8459323a276efa8134805b9e1dc01a4e7d09f01916aa4e20dc049a6b4cde4
+      image: docker.io/library/nginx:1.30
+      imageID: docker.io/library/nginx@sha256:7fad6c0dff97965adbddf28027d934b111fc0221a554315dc274712f3fba24d3
+      lastState:
+        terminated:
+          containerID: containerd://7ff7d009117520783d25d0c8dfd8cdd1eabf2beec901caa2a969849ef420b9ba
+          exitCode: 255
+          finishedAt: "2026-11-24T16:10:50Z"
+          reason: Unknown
+          startedAt: "2026-11-24T04:13:03Z"
+      name: nginx
+      ready: true
+      resources: {}
+      restartCount: 2
+      started: true
+      state:
+        running:
+          startedAt: "2026-11-24T16:10:58Z"
+      user:
+        linux:
+          gid: 0
+          supplementalGroups:
+          - 0
+          uid: 0
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-ktn6c
+        readOnly: true
+        recursiveReadOnly: Disabled
+    hostIP: 172.18.0.2
+    hostIPs:
+    - ip: 172.18.0.2
+    - ip: fc00:f853:ccd:e793::2
+    observedGeneration: 1
+    phase: Running
+    podIP: 10.244.0.24
+    podIPs:
+    - ip: 10.244.0.24
+    qosClass: BestEffort
+    startTime: "2026-11-23T17:09:50Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/restartedAt: "2026-11-23T09:09:48-08:00"
+    creationTimestamp: "2026-11-23T17:09:48Z"
+    generateName: nginx-deployment-5fcbf788b8-
+    generation: 1
+    labels:
+      app: nginx
+      pod-template-hash: 5fcbf788b8
+    name: nginx-deployment-5fcbf788b8-gxmn4
+    namespace: default
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: nginx-deployment-5fcbf788b8
+      uid: dc0ab18d-37d2-404d-8c52-65a1d37ee2c5
+    resourceVersion: "208548"
+    uid: c009e820-ff05-4d32-9cfe-df5c48385c26
+  spec:
+    containers:
+    - env:
+      - name: APP_ENV
+        value: staging
+      image: nginx:1.30
+      imagePullPolicy: IfNotPresent
+      name: nginx
+      ports:
+      - containerPort: 80
+        protocol: TCP
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-mrzn7
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: desktop-control-plane
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-mrzn7
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2026-11-24T16:10:59Z"
+      observedGeneration: 1
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2026-11-23T17:09:48Z"
+      observedGeneration: 1
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2026-11-24T16:10:59Z"
+      observedGeneration: 1
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2026-11-24T16:10:59Z"
+      observedGeneration: 1
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2026-11-23T17:09:48Z"
+      observedGeneration: 1
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://27b499f456b7f122be66d598332570d44e2482bc6d8324ec50fe2a0844c95bdd
+      image: docker.io/library/nginx:1.30
+      imageID: docker.io/library/nginx@sha256:7fad6c0dff97965adbddf28027d934b111fc0221a554315dc274712f3fba24d3
+      lastState:
+        terminated:
+          containerID: containerd://8e1e32308f0e88e7ce6b719f2779fb1e49a54358736970818a281fc54189da60
+          exitCode: 255
+          finishedAt: "2026-11-24T16:10:50Z"
+          reason: Unknown
+          startedAt: "2026-11-24T04:13:03Z"
+      name: nginx
+      ready: true
+      resources: {}
+      restartCount: 2
+      started: true
+      state:
+        running:
+          startedAt: "2026-11-24T16:10:58Z"
+      user:
+        linux:
+          gid: 0
+          supplementalGroups:
+          - 0
+          uid: 0
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-mrzn7
+        readOnly: true
+        recursiveReadOnly: Disabled
+    hostIP: 172.18.0.2
+    hostIPs:
+    - ip: 172.18.0.2
+    - ip: fc00:f853:ccd:e793::2
+    observedGeneration: 1
+    phase: Running
+    podIP: 10.244.0.23
+    podIPs:
+    - ip: 10.244.0.23
+    qosClass: BestEffort
+    startTime: "2026-11-23T17:09:48Z"
+kind: List
+metadata:
+  resourceVersion: ""
+simon@DESKTOP-ODG5TEO:/mnt/c/Users/simon$

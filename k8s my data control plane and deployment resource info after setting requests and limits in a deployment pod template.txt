@@ -1,0 +1,263 @@
+simon@DESKTOP-ODG5TEO:/mnt/c/Users/simon$ kubectl set resources deployment/nginx-deployment \
+> -c=nginx \
+> --requests=cpu=250m,memory=128Mi \
+> --limits=cpu=500m,memory=256Mi
+deployment.apps/nginx-deployment resource requirements updated
+simon@DESKTOP-ODG5TEO:/mnt/c/Users/simon$ kubectl rollout status deployment/nginx-deployment
+deployment "nginx-deployment" successfully rolled out
+simon@DESKTOP-ODG5TEO:/mnt/c/Users/simon$ kubectl describe deployments nginx-deployment
+Name:                   nginx-deployment
+Namespace:              default
+CreationTimestamp:      Mon, 02 Nov 2026 08:17:16 -0800
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 12
+Selector:               app=nginx
+Replicas:               2 desired | 2 updated | 2 total | 2 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:       app=nginx
+  Annotations:  kubectl.kubernetes.io/restartedAt: 2026-11-23T09:09:48-08:00
+  Containers:
+   nginx:
+    Image:      nginx:1.30
+    Port:       80/TCP
+    Host Port:  0/TCP
+    Limits:
+      cpu:     500m
+      memory:  256Mi
+    Requests:
+      cpu:     250m
+      memory:  128Mi
+    Environment:
+      APP_ENV:     staging
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  nginx-deployment-578c8ff859 (0/0 replicas created), nginx-deployment-59f4997b9 (0/0 replicas created), nginx-deployment-75c84cc876 (0/0 replicas created), nginx-deployment-57d4868dd7 (0/0 replicas created), nginx-deployment-cbddd759f (0/0 replicas created), nginx-deployment-5fcbf788b8 (0/0 replicas created)
+NewReplicaSet:   nginx-deployment-76c56c676b (2/2 replicas created)
+Events:
+  Type     Reason                 Age                From                   Message
+  ----     ------                 ----               ----                   -------
+  Normal   ScalingReplicaSet      37h (x2 over 39h)  deployment-controller  Scaled up replica set nginx-deployment-578c8ff859 from 0 to 1
+  Normal   ScalingReplicaSet      37h (x2 over 39h)  deployment-controller  Scaled down replica set nginx-deployment-59f4997b9 from 2 to 1
+  Normal   ScalingReplicaSet      37h (x2 over 39h)  deployment-controller  Scaled up replica set nginx-deployment-578c8ff859 from 1 to 2
+  Normal   ScalingReplicaSet      37h (x2 over 39h)  deployment-controller  Scaled down replica set nginx-deployment-59f4997b9 from 1 to 0
+  Normal   ScalingReplicaSet      37h                deployment-controller  Scaled up replica set nginx-deployment-57d4868dd7 from 0 to 1
+  Normal   ScalingReplicaSet      37h (x3 over 41h)  deployment-controller  Scaled down replica set nginx-deployment-578c8ff859 from 2 to 1
+  Normal   ScalingReplicaSet      37h                deployment-controller  Scaled up replica set nginx-deployment-57d4868dd7 from 1 to 2
+  Normal   ScalingReplicaSet      37h (x3 over 41h)  deployment-controller  Scaled down replica set nginx-deployment-578c8ff859 from 1 to 0
+  Normal   ScalingReplicaSet      36h                deployment-controller  Scaled up replica set nginx-deployment-cbddd759f from 0 to 1
+  Normal   ScalingReplicaSet      36h                deployment-controller  Scaled down replica set nginx-deployment-57d4868dd7 from 2 to 1
+  Normal   ScalingReplicaSet      36h                deployment-controller  Scaled up replica set nginx-deployment-cbddd759f from 1 to 2
+  Normal   ScalingReplicaSet      36h                deployment-controller  Scaled down replica set nginx-deployment-57d4868dd7 from 1 to 0
+  Normal   ScalingReplicaSet      24h                deployment-controller  Scaled up replica set nginx-deployment-5fcbf788b8 from 0 to 1
+  Normal   ScalingReplicaSet      24h                deployment-controller  Scaled down replica set nginx-deployment-cbddd759f from 2 to 1
+  Normal   ScalingReplicaSet      24h                deployment-controller  Scaled up replica set nginx-deployment-5fcbf788b8 from 1 to 2
+  Normal   ScalingReplicaSet      24h                deployment-controller  Scaled down replica set nginx-deployment-cbddd759f from 1 to 0
+  Normal   ScalingReplicaSet      13h (x2 over 13h)  deployment-controller  Scaled up replica set nginx-deployment-5fcbf788b8 from 2 to 4
+  Normal   ScalingReplicaSet      13h (x2 over 13h)  deployment-controller  Scaled down replica set nginx-deployment-5fcbf788b8 from 4 to 2
+  Warning  ReplicaSetCreateError  33s                deployment-controller  Failed to create new replica set "nginx-deployment-76c56c676b": Unauthorized
+  Normal   ScalingReplicaSet      33s                deployment-controller  Scaled up replica set nginx-deployment-76c56c676b from 0 to 1
+  Normal   ScalingReplicaSet      31s                deployment-controller  Scaled down replica set nginx-deployment-5fcbf788b8 from 2 to 1
+  Normal   ScalingReplicaSet      31s                deployment-controller  Scaled up replica set nginx-deployment-76c56c676b from 1 to 2
+  Normal   ScalingReplicaSet      30s                deployment-controller  Scaled down replica set nginx-deployment-5fcbf788b8 from 1 to 0
+simon@DESKTOP-ODG5TEO:/mnt/c/Users/simon$ kubectl get pods -l app=nginx
+NAME                                READY   STATUS    RESTARTS   AGE
+nginx-deployment-76c56c676b-dwkt7   1/1     Running   0          91s
+nginx-deployment-76c56c676b-ptnqj   1/1     Running   0          89s
+simon@DESKTOP-ODG5TEO:/mnt/c/Users/simon$ kubectl describe pod nginx-deployment-76c56c676b-dwkt7
+Name:             nginx-deployment-76c56c676b-dwkt7
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             desktop-control-plane/172.18.0.2
+Start Time:       Tue, 24 Nov 2026 09:51:32 -0800
+Labels:           app=nginx
+                  pod-template-hash=76c56c676b
+Annotations:      kubectl.kubernetes.io/restartedAt: 2026-11-23T09:09:48-08:00
+Status:           Running
+IP:               10.244.0.26
+IPs:
+  IP:           10.244.0.26
+Controlled By:  ReplicaSet/nginx-deployment-76c56c676b
+Containers:
+  nginx:
+    Container ID:   containerd://5a1c4e3ae7713f28f52373839846d4c264ccd15e4dae21e1187bec2cedb6d857
+    Image:          nginx:1.30
+    Image ID:       docker.io/library/nginx@sha256:7fad6c0dff97965adbddf28027d934b111fc0221a554315dc274712f3fba24d3
+    Port:           80/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Tue, 24 Nov 2026 09:51:33 -0800
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     500m
+      memory:  256Mi
+    Requests:
+      cpu:     250m
+      memory:  128Mi
+    Environment:
+      APP_ENV:  staging
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-h4wrl (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       True
+  ContainersReady             True
+  PodScheduled                True
+Volumes:
+  kube-api-access-h4wrl:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  2m3s  default-scheduler  Successfully assigned default/nginx-deployment-76c56c676b-dwkt7 to desktop-control-plane
+  Normal  Pulled     2m3s  kubelet            Container image "nginx:1.30" already present on machine
+  Normal  Created    2m3s  kubelet            Created container: nginx
+  Normal  Started    2m3s  kubelet            Started container nginx
+simon@DESKTOP-ODG5TEO:/mnt/c/Users/simon$ kubectl describe node desktop-control-plane
+Name:               desktop-control-plane
+Roles:              control-plane
+Labels:             beta.kubernetes.io/arch=amd64
+                    beta.kubernetes.io/os=linux
+                    kubernetes.io/arch=amd64
+                    kubernetes.io/hostname=desktop-control-plane
+                    kubernetes.io/os=linux
+                    node-role.kubernetes.io/control-plane=
+Annotations:        node.alpha.kubernetes.io/ttl: 0
+                    volumes.kubernetes.io/controller-managed-attach-detach: true
+CreationTimestamp:  Mon, 02 Nov 2026 08:16:10 -0800
+Taints:             <none>
+Unschedulable:      false
+Lease:
+  HolderIdentity:  desktop-control-plane
+  AcquireTime:     <unset>
+  RenewTime:       Tue, 24 Nov 2026 09:53:51 -0800
+Conditions:
+  Type             Status  LastHeartbeatTime                 LastTransitionTime                Reason                       Message
+  ----             ------  -----------------                 ------------------                ------                       -------
+  MemoryPressure   False   Tue, 24 Nov 2026 09:53:25 -0800   Mon, 02 Nov 2026 08:16:09 -0800   KubeletHasSufficientMemory   kubelet has sufficient memory available
+  DiskPressure     False   Tue, 24 Nov 2026 09:53:25 -0800   Mon, 02 Nov 2026 08:16:09 -0800   KubeletHasNoDiskPressure     kubelet has no disk pressure
+  PIDPressure      False   Tue, 24 Nov 2026 09:53:25 -0800   Mon, 02 Nov 2026 08:16:09 -0800   KubeletHasSufficientPID      kubelet has sufficient PID available
+  Ready            True    Tue, 24 Nov 2026 09:53:25 -0800   Mon, 02 Nov 2026 08:16:33 -0800   KubeletReady                 kubelet is posting ready status
+Addresses:
+  Hostname:    desktop-control-plane
+  InternalIP:  172.18.0.2
+  InternalIP:  fc00:f853:ccd:e793::2
+Capacity:
+  cpu:                16
+  ephemeral-storage:  1055762868Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             7970900Ki
+  pods:               110
+Allocatable:
+  cpu:                16
+  ephemeral-storage:  1055762868Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             7970900Ki
+  pods:               110
+System Info:
+  Machine ID:                 5a7c4b0905a44e89bd8691aa8371514b
+  System UUID:                5a7c4b0905a44e89bd8691aa8371514b
+  Boot ID:                    dfeb32f4-fcae-4cba-a9d6-8e07ae9ebf4d
+  Kernel Version:             6.6.114.1-microsoft-standard-WSL2
+  OS Image:                   Debian GNU/Linux 12 (bookworm)
+  Operating System:           linux
+  Architecture:               amd64
+  Container Runtime Version:  containerd://2.2.0
+  Kubelet Version:            v1.34.3
+  Kube-Proxy Version:
+PodCIDR:                      10.244.0.0/24
+PodCIDRs:                     10.244.0.0/24
+ProviderID:                   kind://docker/desktop/desktop-control-plane
+Non-terminated Pods:          (30 in total)
+  Namespace                   Name                                             CPU Requests  CPU Limits  Memory Requests  Memory Limits  Age
+  ---------                   ----                                             ------------  ----------  ---------------  -------------  ---
+  default                     app-config-deployment-78b4b6b48-95hxn            0 (0%)        0 (0%)      0 (0%)           0 (0%)         9d
+  default                     app-config-deployment-78b4b6b48-kws2b            0 (0%)        0 (0%)      0 (0%)           0 (0%)         9d
+  default                     config-volume-deployment-66d96d9ff4-x9plr        0 (0%)        0 (0%)      0 (0%)           0 (0%)         10d
+  default                     nginx-deployment-76c56c676b-dwkt7                250m (1%)     500m (3%)   128Mi (1%)       256Mi (3%)     2m22s
+  default                     nginx-deployment-76c56c676b-ptnqj                250m (1%)     500m (3%)   128Mi (1%)       256Mi (3%)     2m20s
+  default                     secret-env-demo                                  0 (0%)        0 (0%)      0 (0%)           0 (0%)         12d
+  default                     secret-file-demo                                 0 (0%)        0 (0%)      0 (0%)           0 (0%)         12d
+  default                     secret-volume-deployment-6d647f87b4-qjccr        0 (0%)        0 (0%)      0 (0%)           0 (0%)         10d
+  kube-system                 coredns-66bc5c9577-rj6wt                         100m (0%)     0 (0%)      70Mi (0%)        170Mi (2%)     22d
+  kube-system                 coredns-66bc5c9577-zwn4w                         100m (0%)     0 (0%)      70Mi (0%)        170Mi (2%)     22d
+  kube-system                 etcd-desktop-control-plane                       100m (0%)     0 (0%)      100Mi (1%)       0 (0%)         22d
+  kube-system                 kindnet-xpw2n                                    100m (0%)     100m (0%)   50Mi (0%)        50Mi (0%)      22d
+  kube-system                 kube-apiserver-desktop-control-plane             250m (1%)     0 (0%)      0 (0%)           0 (0%)         22d
+  kube-system                 kube-controller-manager-desktop-control-plane    200m (1%)     0 (0%)      0 (0%)           0 (0%)         22d
+  kube-system                 kube-proxy-l9rww                                 0 (0%)        0 (0%)      0 (0%)           0 (0%)         22d
+  kube-system                 kube-scheduler-desktop-control-plane             100m (0%)     0 (0%)      0 (0%)           0 (0%)         22d
+  lesson5e                    inventory-app-799d788b65-chcgc                   0 (0%)        0 (0%)      0 (0%)           0 (0%)         9d
+  lesson5e                    inventory-app-799d788b65-spj99                   0 (0%)        0 (0%)      0 (0%)           0 (0%)         9d
+  lesson5e                    inventory-config-error-cd789c7cc-g8pbc           0 (0%)        0 (0%)      0 (0%)           0 (0%)         9d
+  lesson5e                    inventory-file-error-575567d859-pb4pp            0 (0%)        0 (0%)      0 (0%)           0 (0%)         8d
+  lesson5e                    inventory-missing-config-56c95d6c5-f2xzj         0 (0%)        0 (0%)      0 (0%)           0 (0%)         8d
+  lesson6                     emptydir-demo                                    0 (0%)        0 (0%)      0 (0%)           0 (0%)         5d13h
+  lesson6                     pvc-demo                                         0 (0%)        0 (0%)      0 (0%)           0 (0%)         5d13h
+  lesson6                     stateful-demo-0                                  0 (0%)        0 (0%)      0 (0%)           0 (0%)         3d14h
+  lesson6                     stateful-demo-1                                  0 (0%)        0 (0%)      0 (0%)           0 (0%)         3d14h
+  lesson6e                    pod-missing-pvc                                  0 (0%)        0 (0%)      0 (0%)           0 (0%)         2d15h
+  lesson6e                    pvc-capacity-consumer                            0 (0%)        0 (0%)      0 (0%)           0 (0%)         2d14h
+  lesson6e                    pvc-consumer                                     0 (0%)        0 (0%)      0 (0%)           0 (0%)         3d
+  lesson6e                    pvc-second-consumer                              0 (0%)        0 (0%)      0 (0%)           0 (0%)         2d14h
+  local-path-storage          local-path-provisioner-5c4cdb564f-4xdsq          0 (0%)        0 (0%)      0 (0%)           0 (0%)         22d
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests    Limits
+  --------           --------    ------
+  cpu                1450m (9%)  1100m (6%)
+  memory             546Mi (7%)  902Mi (11%)
+  ephemeral-storage  0 (0%)      0 (0%)
+  hugepages-1Gi      0 (0%)      0 (0%)
+  hugepages-2Mi      0 (0%)      0 (0%)
+Events:
+  Type     Reason                   Age                  From             Message
+  ----     ------                   ----                 ----             -------
+  Normal   Starting                 102m                 kube-proxy
+  Normal   Starting                 13h                  kube-proxy
+  Normal   Starting                 24h                  kube-proxy
+  Normal   Starting                 24h                  kubelet          Starting kubelet.
+  Normal   NodeHasSufficientMemory  24h (x8 over 24h)    kubelet          Node desktop-control-plane status is now: NodeHasSufficientMemory
+  Normal   NodeHasNoDiskPressure    24h (x8 over 24h)    kubelet          Node desktop-control-plane status is now: NodeHasNoDiskPressure
+  Normal   NodeHasSufficientPID     24h (x7 over 24h)    kubelet          Node desktop-control-plane status is now: NodeHasSufficientPID
+  Normal   NodeAllocatableEnforced  24h                  kubelet          Updated Node Allocatable limit across pods
+  Warning  Rebooted                 24h                  kubelet          Node desktop-control-plane has been rebooted, boot id: 09930656-4b80-4727-9092-7fe26ca87f73
+  Normal   RegisteredNode           24h                  node-controller  Node desktop-control-plane event: Registered Node desktop-control-plane in Controller
+  Normal   NodeHasNoDiskPressure    13h (x8 over 13h)    kubelet          Node desktop-control-plane status is now: NodeHasNoDiskPressure
+  Normal   NodeHasSufficientMemory  13h (x8 over 13h)    kubelet          Node desktop-control-plane status is now: NodeHasSufficientMemory
+  Normal   Starting                 13h                  kubelet          Starting kubelet.
+  Normal   NodeHasSufficientPID     13h (x7 over 13h)    kubelet          Node desktop-control-plane status is now: NodeHasSufficientPID
+  Normal   NodeAllocatableEnforced  13h                  kubelet          Updated Node Allocatable limit across pods
+  Warning  Rebooted                 13h                  kubelet          Node desktop-control-plane has been rebooted, boot id: 48e3b414-c16a-4f87-8761-dec09492e985
+  Normal   RegisteredNode           13h                  node-controller  Node desktop-control-plane event: Registered Node desktop-control-plane in Controller
+  Normal   Starting                 103m                 kubelet          Starting kubelet.
+  Normal   NodeHasSufficientMemory  103m (x8 over 103m)  kubelet          Node desktop-control-plane status is now: NodeHasSufficientMemory
+  Normal   NodeHasNoDiskPressure    103m (x8 over 103m)  kubelet          Node desktop-control-plane status is now: NodeHasNoDiskPressure
+  Normal   NodeHasSufficientPID     103m (x7 over 103m)  kubelet          Node desktop-control-plane status is now: NodeHasSufficientPID
+  Normal   NodeAllocatableEnforced  103m                 kubelet          Updated Node Allocatable limit across pods
+  Warning  Rebooted                 102m                 kubelet          Node desktop-control-plane has been rebooted, boot id: dfeb32f4-fcae-4cba-a9d6-8e07ae9ebf4d
+  Normal   RegisteredNode           102m                 node-controller  Node desktop-control-plane event: Registered Node desktop-control-plane in Controller
+simon@DESKTOP-ODG5TEO:/mnt/c/Users/simon$
