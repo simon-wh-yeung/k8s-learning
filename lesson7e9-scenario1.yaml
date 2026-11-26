@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cpu-pressure-demo
+  namespace: lesson7e9
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cpu-pressure-demo
+  template:
+    metadata:
+      labels:
+        app: cpu-pressure-demo
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.30
+          resources:
+            requests:
+              cpu: "6"
+              memory: "128Mi"
+            limits:
+              cpu: "7"
+              memory: "256Mi"

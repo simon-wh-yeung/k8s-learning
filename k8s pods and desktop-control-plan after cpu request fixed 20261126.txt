@@ -1,0 +1,183 @@
+simon@DESKTOP-ODG5TEO:/mnt/c/Users/simon$ kubectl scale deployment cpu-pressure-demo --replicas=0 -n lesson7e9
+deployment.apps/cpu-pressure-demo scaled
+simon@DESKTOP-ODG5TEO:/mnt/c/Users/simon$ kubectl get pods -n lesson7e9
+No resources found in lesson7e9 namespace.
+simon@DESKTOP-ODG5TEO:/mnt/c/Users/simon$ kubectl set resources deployment/cpu-pressure-demo \
+> -n lesson7e9 \
+> -c=nginx \
+> --requests=cpu=4,memory=128Mi
+deployment.apps/cpu-pressure-demo resource requirements updated
+simon@DESKTOP-ODG5TEO:/mnt/c/Users/simon$ kubectl describe deployment cpu-pressure-demo -n lesson7e9
+Name:                   cpu-pressure-demo
+Namespace:              lesson7e9
+CreationTimestamp:      Thu, 26 Nov 2026 10:12:51 -0800
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 2
+Selector:               app=cpu-pressure-demo
+Replicas:               0 desired | 0 updated | 0 total | 0 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=cpu-pressure-demo
+  Containers:
+   nginx:
+    Image:      nginx:1.30
+    Port:       <none>
+    Host Port:  <none>
+    Limits:
+      cpu:     7
+      memory:  256Mi
+    Requests:
+      cpu:         4
+      memory:      128Mi
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  cpu-pressure-demo-c9cddd66 (0/0 replicas created)
+NewReplicaSet:   cpu-pressure-demo-54d5c976d6 (0/0 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  28m   deployment-controller  Scaled up replica set cpu-pressure-demo-c9cddd66 from 0 to 3
+  Normal  ScalingReplicaSet  75s   deployment-controller  Scaled down replica set cpu-pressure-demo-c9cddd66 from 3 to 0
+simon@DESKTOP-ODG5TEO:/mnt/c/Users/simon$ kubectl scale deployment cpu-pressure-demo --replicas=3 -n lesson7e9
+deployment.apps/cpu-pressure-demo scaled
+simon@DESKTOP-ODG5TEO:/mnt/c/Users/simon$ kubectl rollout status deployment/cpu-pressure-demo -n lesson7e9
+deployment "cpu-pressure-demo" successfully rolled out
+simon@DESKTOP-ODG5TEO:/mnt/c/Users/simon$ kubectl get deployment cpu-pressure-demo -n lesson7e9
+NAME                READY   UP-TO-DATE   AVAILABLE   AGE
+cpu-pressure-demo   3/3     3            3           30m
+simon@DESKTOP-ODG5TEO:/mnt/c/Users/simon$ kubectl get pods -n lesson7e9 -o wide
+NAME                                 READY   STATUS    RESTARTS   AGE   IP            NODE                    NOMINATED NODE   READINESS GATES
+cpu-pressure-demo-54d5c976d6-5xqtq   1/1     Running   0          41s   10.244.0.34   desktop-control-plane   <none>           <none>
+cpu-pressure-demo-54d5c976d6-cxwxj   1/1     Running   0          41s   10.244.0.33   desktop-control-plane   <none>           <none>
+cpu-pressure-demo-54d5c976d6-tx92c   1/1     Running   0          41s   10.244.0.32   desktop-control-plane   <none>           <none>
+simon@DESKTOP-ODG5TEO:/mnt/c/Users/simon$ kubectl describe node desktop-control-plane
+Name:               desktop-control-plane
+Roles:              control-plane
+Labels:             beta.kubernetes.io/arch=amd64
+                    beta.kubernetes.io/os=linux
+                    kubernetes.io/arch=amd64
+                    kubernetes.io/hostname=desktop-control-plane
+                    kubernetes.io/os=linux
+                    node-role.kubernetes.io/control-plane=
+Annotations:        node.alpha.kubernetes.io/ttl: 0
+                    volumes.kubernetes.io/controller-managed-attach-detach: true
+CreationTimestamp:  Mon, 02 Nov 2026 08:16:10 -0800
+Taints:             <none>
+Unschedulable:      false
+Lease:
+  HolderIdentity:  desktop-control-plane
+  AcquireTime:     <unset>
+  RenewTime:       Thu, 26 Nov 2026 10:43:44 -0800
+Conditions:
+  Type             Status  LastHeartbeatTime                 LastTransitionTime                Reason                       Message
+  ----             ------  -----------------                 ------------------                ------                       -------
+  MemoryPressure   False   Thu, 26 Nov 2026 10:43:42 -0800   Mon, 02 Nov 2026 08:16:09 -0800   KubeletHasSufficientMemory   kubelet has sufficient memory available
+  DiskPressure     False   Thu, 26 Nov 2026 10:43:42 -0800   Mon, 02 Nov 2026 08:16:09 -0800   KubeletHasNoDiskPressure     kubelet has no disk pressure
+  PIDPressure      False   Thu, 26 Nov 2026 10:43:42 -0800   Mon, 02 Nov 2026 08:16:09 -0800   KubeletHasSufficientPID      kubelet has sufficient PID available
+  Ready            True    Thu, 26 Nov 2026 10:43:42 -0800   Mon, 02 Nov 2026 08:16:33 -0800   KubeletReady                 kubelet is posting ready status
+Addresses:
+  InternalIP:  172.18.0.2
+  Hostname:    desktop-control-plane
+Capacity:
+  cpu:                16
+  ephemeral-storage:  1055762868Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             7970892Ki
+  pods:               110
+Allocatable:
+  cpu:                16
+  ephemeral-storage:  1055762868Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             7970892Ki
+  pods:               110
+System Info:
+  Machine ID:                 6a3f7d246d6740088217f3e9dd12fc80
+  System UUID:                6a3f7d246d6740088217f3e9dd12fc80
+  Boot ID:                    6ed6fe3d-ded3-433f-a925-2ff5d3d298b7
+  Kernel Version:             6.6.114.1-microsoft-standard-WSL2
+  OS Image:                   Debian GNU/Linux 12 (bookworm)
+  Operating System:           linux
+  Architecture:               amd64
+  Container Runtime Version:  containerd://2.2.0
+  Kubelet Version:            v1.34.3
+  Kube-Proxy Version:
+PodCIDR:                      10.244.0.0/24
+PodCIDRs:                     10.244.0.0/24
+ProviderID:                   kind://docker/desktop/desktop-control-plane
+Non-terminated Pods:          (33 in total)
+  Namespace                   Name                                             CPU Requests  CPU Limits  Memory Requests  Memory Limits  Age
+  ---------                   ----                                             ------------  ----------  ---------------  -------------  ---
+  default                     app-config-deployment-78b4b6b48-95hxn            0 (0%)        0 (0%)      0 (0%)           0 (0%)         11d
+  default                     app-config-deployment-78b4b6b48-kws2b            0 (0%)        0 (0%)      0 (0%)           0 (0%)         11d
+  default                     config-volume-deployment-66d96d9ff4-x9plr        0 (0%)        0 (0%)      0 (0%)           0 (0%)         12d
+  default                     nginx-deployment-76c56c676b-dwkt7                250m (1%)     500m (3%)   128Mi (1%)       256Mi (3%)     2d
+  default                     nginx-deployment-76c56c676b-ptnqj                250m (1%)     500m (3%)   128Mi (1%)       256Mi (3%)     2d
+  default                     secret-env-demo                                  0 (0%)        0 (0%)      0 (0%)           0 (0%)         14d
+  default                     secret-file-demo                                 0 (0%)        0 (0%)      0 (0%)           0 (0%)         14d
+  default                     secret-volume-deployment-6d647f87b4-qjccr        0 (0%)        0 (0%)      0 (0%)           0 (0%)         12d
+  kube-system                 coredns-66bc5c9577-rj6wt                         100m (0%)     0 (0%)      70Mi (0%)        170Mi (2%)     24d
+  kube-system                 coredns-66bc5c9577-zwn4w                         100m (0%)     0 (0%)      70Mi (0%)        170Mi (2%)     24d
+  kube-system                 etcd-desktop-control-plane                       100m (0%)     0 (0%)      100Mi (1%)       0 (0%)         24d
+  kube-system                 kindnet-xpw2n                                    100m (0%)     100m (0%)   50Mi (0%)        50Mi (0%)      24d
+  kube-system                 kube-apiserver-desktop-control-plane             250m (1%)     0 (0%)      0 (0%)           0 (0%)         24d
+  kube-system                 kube-controller-manager-desktop-control-plane    200m (1%)     0 (0%)      0 (0%)           0 (0%)         24d
+  kube-system                 kube-proxy-l9rww                                 0 (0%)        0 (0%)      0 (0%)           0 (0%)         24d
+  kube-system                 kube-scheduler-desktop-control-plane             100m (0%)     0 (0%)      0 (0%)           0 (0%)         24d
+  lesson5e                    inventory-app-799d788b65-chcgc                   0 (0%)        0 (0%)      0 (0%)           0 (0%)         11d
+  lesson5e                    inventory-app-799d788b65-spj99                   0 (0%)        0 (0%)      0 (0%)           0 (0%)         11d
+  lesson5e                    inventory-config-error-cd789c7cc-g8pbc           0 (0%)        0 (0%)      0 (0%)           0 (0%)         11d
+  lesson5e                    inventory-file-error-575567d859-pb4pp            0 (0%)        0 (0%)      0 (0%)           0 (0%)         10d
+  lesson5e                    inventory-missing-config-56c95d6c5-f2xzj         0 (0%)        0 (0%)      0 (0%)           0 (0%)         10d
+  lesson6                     emptydir-demo                                    0 (0%)        0 (0%)      0 (0%)           0 (0%)         7d14h
+  lesson6                     pvc-demo                                         0 (0%)        0 (0%)      0 (0%)           0 (0%)         7d14h
+  lesson6                     stateful-demo-0                                  0 (0%)        0 (0%)      0 (0%)           0 (0%)         5d15h
+  lesson6                     stateful-demo-1                                  0 (0%)        0 (0%)      0 (0%)           0 (0%)         5d15h
+  lesson6e                    pod-missing-pvc                                  0 (0%)        0 (0%)      0 (0%)           0 (0%)         4d15h
+  lesson6e                    pvc-capacity-consumer                            0 (0%)        0 (0%)      0 (0%)           0 (0%)         4d15h
+  lesson6e                    pvc-consumer                                     0 (0%)        0 (0%)      0 (0%)           0 (0%)         5d1h
+  lesson6e                    pvc-second-consumer                              0 (0%)        0 (0%)      0 (0%)           0 (0%)         4d15h
+  lesson7e9                   cpu-pressure-demo-54d5c976d6-5xqtq               4 (25%)       7 (43%)     128Mi (1%)       256Mi (3%)     67s
+  lesson7e9                   cpu-pressure-demo-54d5c976d6-cxwxj               4 (25%)       7 (43%)     128Mi (1%)       256Mi (3%)     67s
+  lesson7e9                   cpu-pressure-demo-54d5c976d6-tx92c               4 (25%)       7 (43%)     128Mi (1%)       256Mi (3%)     67s
+  local-path-storage          local-path-provisioner-5c4cdb564f-4xdsq          0 (0%)        0 (0%)      0 (0%)           0 (0%)         24d
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests      Limits
+  --------           --------      ------
+  cpu                13450m (84%)  22100m (138%)
+  memory             930Mi (11%)   1670Mi (21%)
+  ephemeral-storage  0 (0%)        0 (0%)
+  hugepages-1Gi      0 (0%)        0 (0%)
+  hugepages-2Mi      0 (0%)        0 (0%)
+Events:
+  Type     Reason                   Age                From             Message
+  ----     ------                   ----               ----             -------
+  Normal   Starting                 38h                kube-proxy
+  Normal   Starting                 40m                kube-proxy
+  Normal   Starting                 38h                kubelet          Starting kubelet.
+  Normal   NodeHasNoDiskPressure    38h (x8 over 38h)  kubelet          Node desktop-control-plane status is now: NodeHasNoDiskPressure
+  Normal   NodeHasSufficientPID     38h (x7 over 38h)  kubelet          Node desktop-control-plane status is now: NodeHasSufficientPID
+  Normal   NodeAllocatableEnforced  38h                kubelet          Updated Node Allocatable limit across pods
+  Normal   NodeHasSufficientMemory  38h (x8 over 38h)  kubelet          Node desktop-control-plane status is now: NodeHasSufficientMemory
+  Warning  Rebooted                 38h                kubelet          Node desktop-control-plane has been rebooted, boot id: b20c9255-9db0-4394-abd1-091c5df9dd13
+  Normal   RegisteredNode           38h                node-controller  Node desktop-control-plane event: Registered Node desktop-control-plane in Controller
+  Normal   Starting                 40m                kubelet          Starting kubelet.
+  Normal   NodeHasSufficientMemory  40m (x8 over 40m)  kubelet          Node desktop-control-plane status is now: NodeHasSufficientMemory
+  Normal   NodeHasNoDiskPressure    40m (x8 over 40m)  kubelet          Node desktop-control-plane status is now: NodeHasNoDiskPressure
+  Normal   NodeHasSufficientPID     40m (x7 over 40m)  kubelet          Node desktop-control-plane status is now: NodeHasSufficientPID
+  Normal   NodeAllocatableEnforced  40m                kubelet          Updated Node Allocatable limit across pods
+  Warning  Rebooted                 40m                kubelet          Node desktop-control-plane has been rebooted, boot id: 6ed6fe3d-ded3-433f-a925-2ff5d3d298b7
+  Normal   RegisteredNode           40m                node-controller  Node desktop-control-plane event: Registered Node desktop-control-plane in Controller
+simon@DESKTOP-ODG5TEO:/mnt/c/Users/simon$
