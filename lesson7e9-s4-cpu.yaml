@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cpu-throttle-demo
+  namespace: lesson7e9-s4
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cpu-throttle-demo
+  template:
+    metadata:
+      labels:
+        app: cpu-throttle-demo
+    spec:
+      containers:
+        - name: cpu-worker
+          image: busybox:latest
+          command:
+            - sh
+            - -c
+            - "while true; do :; done"
+          resources:
+            requests:
+              cpu: 50m
+              memory: 16Mi
+            limits:
+              cpu: 100m
+              memory: 64Mi
