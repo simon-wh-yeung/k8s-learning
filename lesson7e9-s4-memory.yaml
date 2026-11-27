@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: memory-oom-demo
+  namespace: lesson7e9-s4
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: memory-oom-demo
+  template:
+    metadata:
+      labels:
+        app: memory-oom-demo
+    spec:
+      containers:
+        - name: memory-worker
+          image: python:3.12-alpine
+          command:
+            - python
+            - -c
+            - |
+              import time
+              print("Allocating 100 MiB of memory", flush=True)
+              data = bytearray(100 * 1024 * 1024)
+              for i in range(0, len(data), 4096):
+                  data[i] = 1
+              print("Allocation completed", flush=True)
+              time.sleep(300)
+          resources:
+            requests:
+              cpu: 50m
+              memory: 32Mi
+            limits:
+              cpu: 250m
+              memory: 64Mi
